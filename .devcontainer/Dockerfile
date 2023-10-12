@@ -80,7 +80,7 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 
 #
 # Flutter SDK
-RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/${FLUTTER_CHANNEL}/linux/flutter_linux_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz \
+RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
 	&& tar -xf flutter.tar.xz -C ~ \
 	&& rm flutter.tar.xz \
 	&& flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
