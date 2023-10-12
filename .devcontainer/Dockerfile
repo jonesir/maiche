@@ -56,7 +56,7 @@ WORKDIR /home/$USERNAME
 # Android SDK
 # https://developer.android.com/studio#downloads
 ENV ANDROID_PLATFORM_VERSION=34
-ENV ANDROID_BUILD_TOOLS_VERSION=34.0.7
+ENV ANDROID_BUILD_TOOLS_VERSION=34.0.0
 ENV ANDROID_HOME=~/android-sdk-linux
 ENV ANDROID_SDK_ROOT="$ANDROID_HOME"
 ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator
