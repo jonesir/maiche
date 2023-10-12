@@ -54,8 +54,6 @@ ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}
 #
 # Flutter SDK
 # https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
-ENV FLUTTER_CHANNEL="stable"
-ENV FLUTTER_VERSION="3.13.0"
 # Make sure to use the needed channel and version for this.
 ENV FLUTTER_HOME=~/flutter
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin
@@ -83,6 +81,8 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
 	&& tar -xf flutter.tar.xz -C ~ \
 	&& rm flutter.tar.xz \
+    && ls ~/flutter
+    && echo $PATH
 	&& flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
 	&& yes | flutter doctor --android-licenses \
 	&& flutter config --no-analytics \
