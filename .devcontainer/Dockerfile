@@ -32,13 +32,23 @@ RUN	apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/* 
 	# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
 	# [Optional] Add sudo support for the non-root user
-RUN	groupadd --gid 1888 developer \
-	&& useradd -s /bin/bash --uid $USER_UID --gid 1888 -m developer \
-	&& echo developer ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/developer \
-	&& chmod 0440 /etc/sudoers.d/developer \
-	&& su developer \
-    && whoami \
-	&& cd /home/developer
+# RUN	groupadd --gid 1888 developer \
+# 	&& useradd -s /bin/bash --uid $USER_UID --gid 1888 -m developer \
+# 	&& echo developer ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/developer \
+# 	&& chmod 0440 /etc/sudoers.d/developer \
+# 	&& su developer \
+#     && whoami \
+# 	&& cd /home/developer
+
+RUN useradd -ms /bin/bash $USERNAME && \
+    usermod -aG sudo $USERNAME
+# New added for disable sudo password
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Set as default user
+USER $USERNAME
+WORKDIR /home/$USERNAME
+
 
 
 
@@ -56,7 +66,6 @@ ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}
 # Flutter SDK
 # https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
 # Make sure to use the needed channel and version for this.
-RUN su developer
 RUN whoami
 ENV FLUTTER_HOME=~/flutter
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin
@@ -69,7 +78,7 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 	&& unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}/cmdline-tools/ \
 	&& rm android-sdk-tools.zip \
 	&& yes | sdkmanager --licenses \
-	&& touch /home/developer/.android/repositories.cfg \
+    && touch ~/.android/repositories.cfg \
 	&& sdkmanager platform-tools \
 	# && sdkmanager emulator \
 	&& sdkmanager "platforms;android-${ANDROID_PLATFORM_VERSION}" "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
@@ -81,12 +90,11 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 
 #
 # Flutter SDK
-RUN su developer
 RUN whoami
 RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
-	&& tar -xf flutter.tar.xz -C /home/developer/ \
+	&& tar -xf flutter.tar.xz -C ~ \
 	&& rm flutter.tar.xz \
-	&& /home/developer/flutter/bin/flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
-	&& yes | /home/developer/flutter/bin/flutter doctor --android-licenses \
-	&& /home/developer/flutter/bin/flutter config --no-analytics \
-	&& /home/developer/flutter/bin/flutter update-packages
+	&& flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
+	&& yes | flutter doctor --android-licenses \
+	&& flutter config --no-analytics \
+	&& flutter update-packages
