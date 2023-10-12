@@ -32,12 +32,13 @@ RUN	apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/* 
 	# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
 	# [Optional] Add sudo support for the non-root user
-RUN	groupadd --gid $USER_GID developer \
-	&& useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m developer \
+RUN	groupadd --gid 1888 developer \
+	&& useradd -s /bin/bash --uid $USER_UID --gid 1888 -m developer \
 	&& echo developer ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/developer \
 	&& chmod 0440 /etc/sudoers.d/developer \
 	&& su developer \
-	&& cd $HOME
+    && whoami \
+	&& cd /home/developer
 
 
 
@@ -68,7 +69,7 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 	&& unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}/cmdline-tools/ \
 	&& rm android-sdk-tools.zip \
 	&& yes | sdkmanager --licenses \
-	&& touch ~/.android/repositories.cfg \
+	&& touch /home/developer/.android/repositories.cfg \
 	&& sdkmanager platform-tools \
 	# && sdkmanager emulator \
 	&& sdkmanager "platforms;android-${ANDROID_PLATFORM_VERSION}" "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
@@ -83,9 +84,9 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 RUN su developer
 RUN whoami
 RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
-	&& tar -xf flutter.tar.xz -C ~ \
+	&& tar -xf flutter.tar.xz -C /home/developer/ \
 	&& rm flutter.tar.xz \
-	&& ~/flutter/bin/flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
-	&& yes | ~/flutter/bin/flutter doctor --android-licenses \
-	&& ~/flutter/bin/flutter config --no-analytics \
-	&& ~/flutter/bin/flutter update-packages
+	&& /home/developer/flutter/bin/flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
+	&& yes | /home/developer/flutter/bin/flutter doctor --android-licenses \
+	&& /home/developer/flutter/bin/flutter config --no-analytics \
+	&& /home/developer/flutter/bin/flutter update-packages
