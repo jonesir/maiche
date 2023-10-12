@@ -23,7 +23,7 @@ ARG USER_GID=$USER_UID
 # Install needed packages, setup user anda clean up.
 RUN  apt update \
 	&& apt install -y sudo \
-	&& apt install -y openjdk-13-jdk-headless --no-install-recommends \
+	&& apt install -y openjdk-18-jdk --no-install-recommends \
 	&& apt install -y wget curl git xz-utils zip unzip --no-install-recommends 
 	
 	# Clean Up
@@ -55,8 +55,8 @@ WORKDIR /home/$USERNAME
 #
 # Android SDK
 # https://developer.android.com/studio#downloads
-ENV ANDROID_PLATFORM_VERSION=34
-ENV ANDROID_BUILD_TOOLS_VERSION=34.0.4
+ENV ANDROID_PLATFORM_VERSION=33
+ENV ANDROID_BUILD_TOOLS_VERSION=33.0.0
 ENV ANDROID_HOME=~/android-sdk-linux
 ENV ANDROID_SDK_ROOT="$ANDROID_HOME"
 ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator
@@ -66,12 +66,12 @@ ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}
 # https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
 # Make sure to use the needed channel and version for this.
 ENV FLUTTER_HOME=~/flutter
-ENV PATH=${PATH}:${FLUTTER_HOME}/bin
+# ENV PATH=${PATH}:${FLUTTER_HOME}/bin
 
 
 #
 # Android SDK	
-RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip \
+RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip \
 	&& mkdir -p ${ANDROID_HOME}/ \
 	&& unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}/cmdline-tools/ \
 	&& rm android-sdk-tools.zip \
