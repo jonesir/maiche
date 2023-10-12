@@ -32,11 +32,11 @@ RUN	apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/* 
 	# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
 	# [Optional] Add sudo support for the non-root user
-RUN	groupadd --gid $USER_GID $USERNAME \
-	&& useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-	&& echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-	&& chmod 0440 /etc/sudoers.d/$USERNAME \
-	&& su $USERNAME \
+RUN	groupadd --gid $USER_GID developer \
+	&& useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m developer \
+	&& echo developer ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/developer \
+	&& chmod 0440 /etc/sudoers.d/developer \
+	&& su developer \
 	&& cd $HOME
 
 
@@ -55,7 +55,7 @@ ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}
 # Flutter SDK
 # https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
 # Make sure to use the needed channel and version for this.
-RUN su $USERNAME
+RUN su developer
 RUN whoami
 ENV FLUTTER_HOME=~/flutter
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin
@@ -80,7 +80,7 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 
 #
 # Flutter SDK
-RUN su $USERNAME
+RUN su developer
 RUN whoami
 RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
 	&& tar -xf flutter.tar.xz -C ~ \
