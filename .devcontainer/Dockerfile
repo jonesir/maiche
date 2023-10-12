@@ -55,6 +55,7 @@ ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}
 # Flutter SDK
 # https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
 # Make sure to use the needed channel and version for this.
+RUN whoami
 ENV FLUTTER_HOME=~/flutter
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin
 
@@ -66,7 +67,7 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 	&& unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}/cmdline-tools/ \
 	&& rm android-sdk-tools.zip \
 	&& yes | sdkmanager --licenses \
-	&& touch $HOME/.android/repositories.cfg \
+	&& touch ~/.android/repositories.cfg \
 	&& sdkmanager platform-tools \
 	# && sdkmanager emulator \
 	&& sdkmanager "platforms;android-${ANDROID_PLATFORM_VERSION}" "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
@@ -78,11 +79,11 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 
 #
 # Flutter SDK
+RUN whoami
 RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
-	&& tar -xf flutter.tar.xz -C $HOME \
+	&& tar -xf flutter.tar.xz -C ~ \
 	&& rm flutter.tar.xz \
-    && whoami \
-	&& $HOME/flutter/bin/flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
-	&& yes | $HOME/flutter/bin/flutter doctor --android-licenses \
-	&& $HOME/flutter/bin/flutter config --no-analytics \
-	&& $HOME/flutter/bin/flutter update-packages
+	&& ~/flutter/bin/flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
+	&& yes | ~/flutter/bin/flutter doctor --android-licenses \
+	&& ~/flutter/bin/flutter config --no-analytics \
+	&& ~/flutter/bin/flutter update-packages
