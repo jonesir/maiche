@@ -26,24 +26,17 @@ RUN  apt update \
 	&& apt install -y openjdk-18-jdk --no-install-recommends \
 	&& apt install -y wget curl git xz-utils zip unzip --no-install-recommends 
 	
-	# Clean Up
-RUN	apt-get autoremove -y \
-	&& apt-get clean -y \
-	&& rm -rf /var/lib/apt/lists/* 
-	# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
-	# [Optional] Add sudo support for the non-root user
-# RUN	groupadd --gid 1888 developer \
-# 	&& useradd -s /bin/bash --uid $USER_UID --gid 1888 -m developer \
-# 	&& echo developer ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/developer \
-# 	&& chmod 0440 /etc/sudoers.d/developer \
-# 	&& su developer \
-#     && whoami \
-# 	&& cd /home/developer
-
-RUN useradd -ms /bin/bash $USERNAME && \
-    usermod -aG sudo $USERNAME
-# New added for disable sudo password
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Create the user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    #
+    # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME \
+    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+    && chown -R $USER_UID:$USER_GID /home/$USERNAME
 
 # Set as default user
 USER $USERNAME
