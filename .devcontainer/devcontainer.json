@@ -11,13 +11,13 @@
 		"dart-code.dart-code",
 		"dart-code.flutter"
 	]}
-},
+}
 	// Add the IDs of extensions you want installed when the container is created.
 	
 	// This command create an example project after the container is created.
 	// "postCreateCommand": "flutter create test_project"
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [],
+	// "forwardPorts": [],
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "developer"
+	// "remoteUser": "root"
 }
