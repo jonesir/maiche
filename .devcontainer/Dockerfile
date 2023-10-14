@@ -16,7 +16,7 @@ ENV LANG C.UTF-8
 # will be updated to match your local UID/GID (when using the dockerFile property).
 # See https://aka.ms/vscode-remote/containers/non-root-user for details.
 ARG USERNAME=developer
-ARG USER_UID=1888
+ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 #
