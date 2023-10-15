@@ -93,3 +93,5 @@ RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_inf
 	&& yes | ~/flutter/bin/flutter doctor --android-licenses \
 	&& ~/flutter/bin/flutter config --no-analytics \
 	&& ~/flutter/bin/flutter update-packages
+
+USER root
