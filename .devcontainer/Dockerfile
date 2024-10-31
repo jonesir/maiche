@@ -82,7 +82,7 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 #
 # Flutter SDK
 RUN whoami
-RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.7-stable.tar.xz \
+RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.22.0-stable.tar.xz \
 	&& tar -xf flutter.tar.xz -C ~ \
 	&& rm flutter.tar.xz \
     && echo $PATH \
